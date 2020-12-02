@@ -1,7 +1,6 @@
 const Cart = require('../models/cart')
 const Wishlist = require('../models/wishlist')
 const Voucher = require('../models/voucher')
-const { default: Nexmo } = require('nexmo')
 // exports.cartById = (req, res, next, id) => {
 //     Cart.findById(id).exec((err, cart) => {
 //         if(err || !cart) {

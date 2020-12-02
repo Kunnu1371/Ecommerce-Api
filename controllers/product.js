@@ -82,7 +82,7 @@ exports.paginatedResults = (Product) => {
         }
         try {
             results.products = await Product.find()
-                                            .select("-photo")
+                                            // .select("-photo")
                                             .populate("rootcategory", "_id name")
                                             .populate("category", "_id name")
                                             .populate("subcategory", "_id name")
@@ -177,11 +177,14 @@ exports.listRelated = (req, res) => {
 
 
 exports.photo  = (req, res) => {
-    if(req.product.photo)
-    console.log(req.product.photo.data, req.product.photo.contentType)
-    // res.set("Content-Type", req.product.photo.contentType[0])
-    // res.status(200).sendFile(req.product.photo.data[0])
-    res.status(200).send(req.product.photo.data)
+    //Filepath in db :- https://kunnu1371.s3.ap-south-1.amazonaws.com/Smartaxom/photo-1604485791961.PNG
+    if(req.product.photo) {
+        // console.log(req.product.photo)
+        return res.status(200).json(req.product.photo)
+    }
+    else {
+        return res.status(400).json("Couldn't get the photo path")
+    }
 }
 
 
