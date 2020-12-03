@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const  { read, remove, productById, listRelated, photo, paginatedResults }  = require('../controllers/product');
+const  { read, remove, productById, listRelated, photo, paginatedResults, random }  = require('../controllers/product');
 const { requireSignin, isAdmin, isAuth } = require('../controllers/authAdmin');
 const  { adminById }  = require('../controllers/admin')
 const { subCategoryById } = require('../controllers/subCategory')
@@ -20,6 +20,7 @@ router.delete('/product/delete/:productId/:adminId', requireSignin, isAdmin, isA
 router.get('/products/related/:productId', listRelated)
 router.get('/product/photo/:productId', photo)
 router.get('/products', paginatedResults(Product))
+router.get('/randomproducts', random)
   
 router.param('adminId', adminById)
 router.param('productId', productById)

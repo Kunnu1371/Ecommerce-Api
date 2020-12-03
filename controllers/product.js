@@ -53,6 +53,26 @@ exports.remove = (req, res) => {
     })
 }
 
+exports.random = async(req, res) => {
+    try {
+        const product = await Product.find()
+        // console.log(product)
+        let randomProducts = []
+        for(let i = 0; i < 4; i++) {
+            randomProducts[i] = product[Math.floor(Math.random() * 10)]
+            // console.log(randomProducts[i])
+        }
+        // console.log(randomProducts)
+        return res.status(200).json({
+            status: "success",
+            randomProducts
+        })
+    }
+    catch(e) {
+        return res.status(400).json(e.message)
+    }
+}
+
 
 exports.paginatedResults = (Product) => {
     return async (req, res, next) => {
