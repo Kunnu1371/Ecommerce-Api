@@ -3,16 +3,24 @@ const { ObjectId } = mongoose.Schema
 
 const cartSchema = new mongoose.Schema({
  
-    Quantity: {
-        type: Number,
-        default: 1
-    },
-    product: {
+    user: {
         type: ObjectId,
-        ref: 'Product',
+        ref: 'User',
         required: true
-    }
-}, 
+    },
+
+    products: [{
+        product: {
+            type: ObjectId,
+            ref: 'Product',
+            required: true
+        },
+        quantity: {
+            type: Number,
+            default: 1
+        }
+    }]
+},  
 {
     timestamps: true
 })
