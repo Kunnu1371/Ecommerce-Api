@@ -209,20 +209,21 @@ exports.photo  = (req, res) => {
 
 
 const Cart = require('../models/cart')
-exports.decreaseQuantity = async(req, res) => {
-    try{
-        const cart = await Cart.find().populate("product")
-        cart.map( async(product) => {
-            console.log(product)
-            const productQuantityInCart = product.Quantity
-            console.log("productQuantityInCart: ", productQuantityInCart)
-            await Product.findOneAndUpdate({_id: product.product}, {$inc: { quantity: -productQuantityInCart, sold: +productQuantityInCart }}, {new: true}).exec((err, results) => {
-                if(err) {return res.status(500).json({error: err})}
-                console.log("Successfully updated product quantity in database", results.quantity)
+exports.decreaseQuantity = async(req, res, next) => {
+    try {
+        const user = req.params.userId
+        const userCart = await Cart.findOne({user: user}).populate("products.product")
+        userCart.products.map((product) => {
+            // console.log(product)
+            const productQuantityInCart = product.quantity    
+            Product.findOneAndUpdate({_id: product.product._id}, {$inc: {sold: +productQuantityInCart , quantity: -productQuantityInCart}}, {new: true}).exec((err, result) => {
+                if(err) return res.status(500).json(err)
+                console.log("product quantity and sold updated in db.")
             })
         })
     }
     catch(e) {
-        return res.status(400).json(e)
+        return res.status(400).json(e.message)
     }     
+    next()
 }
