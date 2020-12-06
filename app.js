@@ -15,6 +15,7 @@ const voucherRoutes = require('./routes/voucher')
 const cartRoutes = require('./routes/cart')
 const wishListRoutes = require('./routes/wishlist')
 const bannerRoutes = require('./routes/banner')
+const trendingRoutes = require('./routes/trending')
 const cors = require('cors')
 
 // importing Middlewares
@@ -53,6 +54,7 @@ app.use('/api', voucherRoutes)
 app.use('/api', cartRoutes)
 app.use('/api', wishListRoutes)
 app.use('/api', bannerRoutes)
+app.use('/api', trendingRoutes)
 
 app.listen(3000, () => {
     console.log(`Server started on port 3000`)

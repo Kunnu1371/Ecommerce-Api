@@ -4,14 +4,12 @@ const CarousalSchema = mongoose.Schema({
     name: {
         type: String
     },
-    image: {
-        data: Buffer,
-        contentType: String
-    },
-    date: {
-        type: Date,
-        default: Date.now()
+    photo: {
+        filePath: String,
+        key: String,
     }
+}, {
+    timestamps: true 
 })
 
 module.exports = mongoose.model('Carousal', CarousalSchema);

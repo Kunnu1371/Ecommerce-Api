@@ -105,7 +105,7 @@ exports.remove = (req, res) => {
                 error: err
             })
         }
-        res.json({
+        res.status(200).json({
             status: "success",
             "message": "Banner deleted successfully."
         })
