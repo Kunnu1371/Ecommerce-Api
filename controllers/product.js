@@ -78,7 +78,7 @@ exports.paginatedResults = (Product) => {
     return async (req, res, next) => {
         let order = req.query.order ? req.query.order : 'asc';
         let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
-        let limit = req.query.limit ? parseInt(req.query.limit) : 10;
+        let limit = req.query.limit ? parseInt(req.query.limit) : 6;
         const page = parseInt(req.query.page)
 
         console.log(req.query)

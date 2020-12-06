@@ -20,7 +20,7 @@ router.delete('/product/delete/:productId/:adminId', requireSignin, isAdmin, isA
 router.get('/products/related/:productId', listRelated)
 router.get('/product/photo/:productId', photo)
 router.get('/products', paginatedResults(Product))
-router.get('/randomproducts', random)
+// router.get('/randomproducts', random)
   
 router.param('adminId', adminById)
 router.param('productId', productById)
