@@ -71,7 +71,6 @@ exports.readTrendingRootCategory = (req, res) => {
 
 exports.createTrendingRootCategory = async(req, res) => {
     const rootcategory = await RootCategory.findById(req.params.rootcategoryId)
-    // return res.json(rootcategory)
     const object = {
         name: rootcategory.name,
         rootcategoryId: rootcategory._id,
@@ -88,8 +87,16 @@ exports.createTrendingRootCategory = async(req, res) => {
     })
 }
 
-exports.updateTrendingRootCategory = (req, res) => {
-    
+exports.updateTrendingRootCategory = async (req, res) => {
+    try {
+        const updated = await FrontendRootCategory.findOneAndUpdate({_id: req.params.trendingRootCategoryId}, {$set: req.body}, {new: true})
+        return res.status(201).json({
+            status: "success",
+            updated
+        })
+    } catch(e) {
+        return res.status(400).json(e.message)
+    }
 }
 
 exports.removeTrendingRootCategory = (req, res) => {
@@ -110,15 +117,37 @@ exports.removeTrendingRootCategory = (req, res) => {
 
 // FUCNTIONS FOR CATEGORY
 exports.readTrendingCategory = (req, res) => {
-    return res.status(200).json(req.frontendRootCategory)
+    return res.status(200).json(req.frontendCategory)
 }
 
-exports.createTrendingCategory = (req, res) => {
-
+exports.createTrendingCategory = async (req, res) => {
+    const category = await Category.findById(req.params.categoryId)
+    const object = {
+        name: category.name,
+        categoryId: category._id,
+        photo: category.photo
+    }
+    const frontendcategory = new FrontendCategory(object)
+    frontendcategory.save((err, result) => {
+        if(err) return res.status(500).json(err)
+        return res.status(201).json({
+            status: "success",
+            message: "created",
+            result
+        })
+    })
 }
 
-exports.updateTrendingCategory = (req, res) => {
-
+exports.updateTrendingCategory = async (req, res) => {
+    try {
+        const updated = await FrontendCategory.findOneAndUpdate({_id: req.params.trendingCategoryId}, {$set: req.body}, {new: true})
+        return res.status(201).json({
+            status: "success",
+            updated
+        })
+    } catch(e) {
+        return res.status(400).json(e.message)
+    }
 }
 
 exports.removeTrendingCategory = (req, res) => {
@@ -132,7 +161,7 @@ exports.removeTrendingCategory = (req, res) => {
         res.status(200).json({
             status: "success",
             message: "deleted successfully."
-        })
+        }) 
     })
 }
 
@@ -143,12 +172,34 @@ exports.readTrendingSubCategory = (req, res) => {
     return res.status(200).json(req.frontendSubCategory)
 }
 
-exports.createTrendingSubCategory = (req, res) => {
-
+exports.createTrendingSubCategory = async (req, res) => {
+    const subcategory = await SubCategory.findById(req.params.subcategoryId)
+    const object = {
+        name: subcategory.name,
+        subcategoryId: subcategory._id,
+        photo: subcategory.photo
+    }
+    const frontendcategory = new FrontendSubCategory(object)
+    frontendcategory.save((err, result) => {
+        if(err) return res.status(500).json(err)
+        return res.status(201).json({
+            status: "success",
+            message: "created",
+            result
+        })
+    })
 }
 
-exports.updateTrendingSubCategory = (req, res) => {
-
+exports.updateTrendingSubCategory = async (req, res) => {
+    try {
+        const updated = await FrontendSubCategory.findOneAndUpdate({_id: req.params.trendingSubCategoryId}, {$set: req.body}, {new: true})
+        return res.status(201).json({
+            status: "success",
+            updated
+        })
+    } catch(e) {
+        return res.status(400).json(e.message)
+    }
 }
 
 exports.removeTrendingSubCategory = (req, res) => {
@@ -174,12 +225,34 @@ exports.readTrendingProduct = (req, res) => {
     return res.status(200).json(req.frontendProduct)
 }
 
-exports.createTrendingProduct = (req, res) => {
-
+exports.createTrendingProduct = async(req, res) => {
+    const product = await Product.findById(req.params.productId)
+    const object = {
+        name: product.name,
+        productId: product._id,
+        photo: product.photo
+    }
+    const frontendcategory = new FrontendProduct(object)
+    frontendcategory.save((err, result) => {
+        if(err) return res.status(500).json(err)
+        return res.status(201).json({
+            status: "success",
+            message: "created",
+            result
+        })
+    })
 }
 
-exports.updateTrendingProduct = (req, res) => {
-
+exports.updateTrendingProduct = async (req, res) => {
+    try {
+        const updated = await FrontendProduct.findOneAndUpdate({_id: req.params.trendingProductId}, {$set: req.body}, {new: true})
+        return res.status(201).json({
+            status: "success",
+            updated
+        })
+    } catch(e) {
+        return res.status(400).json(e.message)
+    }
 }
 
 exports.removeTrendingProduct = (req, res) => {
