@@ -1,6 +1,7 @@
 const Order =  require('../models/order')
 const Cart =  require('../models/cart')
 const User = require('../models/user')
+const Voucher = require('../models/voucher')
 const {errorHandler} = require('../helpers/dbErrorHandler')
 const  { decreaseQuantity } = require('../controllers/product')
 const Nexmo = require('nexmo');
@@ -33,14 +34,14 @@ exports.create = async (req, res) => {
         user: req.profile,
         products: [],
         address: req.body.address,
+        total: 0
     } 
     order.user.salt = undefined
     order.user.hashed_Password = undefined
 
-    let history = []
-
+    const user = req.params.userId 
     // Before placing order it will check cart is empty or not. If cart is empty a message will return "Cannot place order, cart is empty. "
-    const user = req.params.userId
+    // const user = req.params.userId
     const userCart = await Cart.findOne({user: user})
                                .populate('user', '_id role name phone email')
                                .populate('products.product')
@@ -50,10 +51,11 @@ exports.create = async (req, res) => {
     if(productsInCart) {
         userCart.products.map((product) => {
             order.products.push(product)
+            order.total = order.total + product.product.price
         })
+        
         const orderCreated = new Order(order) 
-        let ordersbyUser = order.user.history.length
-        await orderCreated.save(async (err, order) => {
+        await orderCreated.save(async (err, order) => { 
             if(err) { return res.status(500).json({error: errorHandler(err)})}
             // console.log(order) 
             res.status(201).json({
@@ -181,8 +183,8 @@ exports.create = async (req, res) => {
 }
 
 
-exports.OrderHistory = (req, res) => {
-    Order.find({user: req.params.userId})
+exports.OrderHistory = async (req, res) => {
+    await Order.find({user: req.params.userId})
     .sort('-created')
     .exec((err, order) => {
         if(err) {
@@ -192,7 +194,7 @@ exports.OrderHistory = (req, res) => {
         }
         return res.status(200).json({
             status: "success",
-            Orders: order.length, 
+            totalOrders: order.length, 
             order
         })
     }) 

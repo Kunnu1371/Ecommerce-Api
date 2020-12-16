@@ -77,9 +77,9 @@ exports.getCartItems = async (req, res) => {
 }
 
 
-exports.getCartTotal = (req, res) => {
+exports.getCartTotal = async (req, res) => {
     const user = req.params.userId
-    Cart.findOne({user: user})
+    await Cart.findOne({user: user})
     .populate("products.product")
         .exec((err, data) => {
         if(err) return res.status(500).json(err)
@@ -110,6 +110,8 @@ exports.getCartTotal = (req, res) => {
                     } else {
                         // console.log(voucher.amount)
                         const updatedTotal = Total - voucher.amount
+                        req.finalAmount = updatedTotal
+                        req.voucher = voucher
                         return res.status(200).json({
                             status: "success",
                             message: `Voucher applied successfully. You get a discount of ${voucher.amount}`,
@@ -119,6 +121,8 @@ exports.getCartTotal = (req, res) => {
                 }
             })
         } else {
+            req.finalAmount = Total
+            req.voucher = voucher
             return res.status(200).json({
                 status: "success",
                 cartTotal: Total

@@ -13,6 +13,12 @@ const OrderSchema = new mongoose.Schema(
       required: true,
     },  
     
+    total: {
+      type: Number
+    },
+    voucher: {
+      type: String
+    },
     transaction_id: {},
     // amount: { type: Number },
 
