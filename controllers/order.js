@@ -46,14 +46,14 @@ exports.create = async (req, res) => {
                                .populate('user', '_id role name phone email')
                                .populate('products.product')
     const productsInCart = userCart.products.length
-    // console.log(productsInCart)
-
+    // console.log(userCart)
     if(productsInCart) {
         userCart.products.map((product) => {
-            order.products.push(product)
-            order.total = order.total + product.product.price
+            // console.log(product)
+            order.total = order.total + product.product.price * product.quantity
         })
-        
+        order.products = userCart.products
+        // res.json(order.products)
         const orderCreated = new Order(order) 
         await orderCreated.save(async (err, order) => { 
             if(err) { return res.status(500).json({error: errorHandler(err)})}
@@ -158,7 +158,7 @@ exports.create = async (req, res) => {
         if(err) return res.status(500).json(err)
         console.log("cart is cleared.")
     })
-                    // // SMS Alert
+                    // SMS Alert
                     //     const nexmo = await new Nexmo({
                     //         apiKey: process.env.APIKEY,
                     //         apiSecret: process.env.APISECRET,
@@ -184,7 +184,7 @@ exports.create = async (req, res) => {
 
 
 exports.OrderHistory = async (req, res) => {
-    await Order.find({user: req.params.userId})
+    await Order.find({user: req.params.userId}).populate('products.product')
     .sort('-created')
     .exec((err, order) => {
         if(err) {
@@ -201,15 +201,16 @@ exports.OrderHistory = async (req, res) => {
 }
 
 
-exports.getOrderDetail = (req, res) => {
+exports.getOrderDetail = async (req, res) => {
     // console.log(req.order, req.order._id)
-    Order.findById(req.order._id)
-         .populate('user', 'name email role createdAt updatedAt')
-         .exec((err, data) => {
+    await Order.findById(req.order._id)
+         .populate('user', 'name email role')
+         .populate('products.product')
+         .exec((err, order) => {
              if(err) return res.status(500).json(err)
              return res.status(200).json({
                 status: "success",
-                data
+                order
             })
         })
 }

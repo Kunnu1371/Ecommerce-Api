@@ -49,11 +49,12 @@ exports.update = (req, res) => {
 } 
 
 
-exports.purchaseHistory = (req, res) => {
-    Order.find({user: req.profile._id})
+exports.purchaseHistory = async (req, res) => {
+    await Order.find({user: req.params.userId})
     .populate('user', '_id name email') 
+    .populate('products.product') 
     .sort('-created') 
-    .exec( async (err, orders) => {
+    .exec((err, orders) => {
         if(err) {  
             return res.status(500).json({
                 error: errorHandler(err)
@@ -61,7 +62,7 @@ exports.purchaseHistory = (req, res) => {
         }    
         res.status(200).json({
             status: "success",
-            Orders: orders.length, 
+            total: orders.length, 
             orders
         })
     })

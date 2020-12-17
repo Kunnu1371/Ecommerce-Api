@@ -9,10 +9,10 @@ router.get('/search', async function(req, res) {
                             $regex: req.query.keyword, 
                             $options:"$i"
                         },
-                        description: {
-                            $regex: req.query.keyword, 
-                            $options:"$i"
-                        },
+                        // description: {
+                        //     $regex: req.query.keyword, 
+                        //     $options:"$i"
+                        // },
                     }
                     : {}
 

@@ -137,3 +137,23 @@ exports.moveToCart = async (req, res) => {
     }
     
 }
+
+
+exports.checkProduct = async(req, res) => {
+    const productId = req.params.productId
+    const userId = req.params.userId
+    let isPresent = 0
+    try {
+        const userWishlist = await Wishlist.findOne({user: userId})
+        const productsInUserWishlist = userWishlist.products
+        for(product of productsInUserWishlist) {
+            if(product.product == productId) {
+                isPresent  = 1
+                break
+            }
+        }
+        res.json(isPresent)
+    } catch(e) {
+        return res.status(500).json(e.message)
+    }
+}
