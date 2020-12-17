@@ -227,3 +227,18 @@ exports.decreaseQuantity = async(req, res, next) => {
     }     
     next()
 }
+
+
+exports.showGridProducts = async (req, res) => {
+    try {
+        console.log(req.rootcategory._id)
+        const products = await Product.find({rootcategory: req.rootcategory._id, show: 1})
+        return res.status(200).json({
+            total: products.length,
+            products
+        })
+    }
+    catch(e) {
+        return res.status(500).json(e.message)
+    }
+} 

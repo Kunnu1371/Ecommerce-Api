@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const  { read, remove, productById, listRelated, photo, paginatedResults, random }  = require('../controllers/product');
+const  { read, remove, productById, listRelated, photo, paginatedResults, random, showGridProducts }  = require('../controllers/product');
 const { requireSignin, isAdmin, isAuth } = require('../controllers/authAdmin');
 const  { adminById }  = require('../controllers/admin')
 const { subCategoryById } = require('../controllers/subCategory')
+const { rootcategoryById } = require('../controllers/rootCategory')
 
 const RootCategory = require('../models/rootCategory')
 const Category = require('../models/category')
@@ -20,11 +21,13 @@ router.delete('/product/delete/:productId/:adminId', requireSignin, isAdmin, isA
 router.get('/products/related/:productId', listRelated)
 router.get('/product/photo/:productId', photo)
 router.get('/products', paginatedResults(Product))
+router.get('/:rootcategoryId/gridProducts', showGridProducts)
 // router.get('/randomproducts', random)
   
 router.param('adminId', adminById)
 router.param('productId', productById)
 router.param('subcategoryId', subCategoryById)
+router.param('rootcategoryId', rootcategoryById)
 
 
 // Set The Storage Engine
