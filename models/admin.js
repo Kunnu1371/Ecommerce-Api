@@ -74,7 +74,7 @@ userSchema.methods = {
         } catch (err) {
             return '';
         }
-    }
+    },
 }
 
 module.exports = mongoose.model('Admin', userSchema);

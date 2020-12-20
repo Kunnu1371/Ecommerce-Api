@@ -4,12 +4,10 @@ const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 
 exports.signup = async (req, res) => {
-    // console.log(req.body)
     const userFound = await User.findOne({email: { $regex: `^${req.body.email}$`, $options: "i" }}, (err, user) => {
         if(err) return res.status(500).json(err)
     })
     if(userFound) {
-        // console.log("userFound", userFound)
         return res.json("User with that email exist in database. Please login")
     } else {
             const user = new User(req.body)

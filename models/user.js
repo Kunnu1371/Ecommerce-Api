@@ -45,6 +45,14 @@ const userSchema = new mongoose.Schema({
         default: []
         // type: ObjectId,
         // ref: "Order"
+    },
+    resetPasswordToken: {
+        type: String,
+        required: false
+    },
+    resetPasswordExpired: {
+        type: Date,
+        required: false
     }
 },  {
     timestamps: true
@@ -76,6 +84,11 @@ userSchema.methods = {
         } catch (err) {
             return '';
         }
+    },
+    
+    generatePasswordReset: function() {
+        this.resetPasswordToken = crypto.randomBytes(20).toString('hex')
+        this.resetPasswordExpired = Date.now() + 3600000 // expires in an hour
     }
 }
 
